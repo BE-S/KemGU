@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6C078594-CE5E-4297-B071-EA3D8137D84E}</ProjectGuid>
+    <ProjectGuid>{E1506875-C82C-46EA-BA0B-030CF362E563}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp2</RootNamespace>
-    <AssemblyName>ConsoleApp2</AssemblyName>
+    <RootNamespace>task2</RootNamespace>
+    <AssemblyName>task2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,15 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="secondTaskClass\Animal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="secondTaskClass\AnimalManager.cs" />
-    <Compile Include="secondTaskClass\animalTypes\Amphibian.cs" />
-    <Compile Include="secondTaskClass\animalTypes\Bird.cs" />
-    <Compile Include="secondTaskClass\animalTypes\Fish.cs" />
-    <Compile Include="secondTaskClass\animalTypes\Mammal .cs" />
-    <Compile Include="secondTaskClass\animalTypes\Reptile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
