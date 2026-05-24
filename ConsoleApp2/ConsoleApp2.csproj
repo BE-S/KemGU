@@ -52,9 +52,12 @@
     <Compile Include="secondTaskClass\animalTypes\Fish.cs" />
     <Compile Include="secondTaskClass\animalTypes\Mammal .cs" />
     <Compile Include="secondTaskClass\animalTypes\Reptile.cs" />
+    <Compile Include="thirdTaskClass\MatrixException.cs" />
+    <Compile Include="thirdTaskClass\SquareMatrix.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

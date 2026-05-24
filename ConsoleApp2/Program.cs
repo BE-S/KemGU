@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using ConsoleApp2.thirdTaskClass;
 using ConsoleApp2.secondTaskClass;
 using ConsoleApp2.secondTaskClass.animalTypes;
 
@@ -12,6 +12,10 @@ namespace app
             try
             {
                 doMenu(mainMenu);
+            }
+            catch (MatrixException e)
+            {
+                Console.WriteLine("Ошибка матрицы: " + e.Message);
             }
             catch (OverflowException e)
             {
@@ -34,6 +38,7 @@ namespace app
             Console.WriteLine(
                         "1 - Вычислить a^n, изменить позиции элементов у числа\n" +
                         "2 - Зоомагазин\n" +
+                        "3 - Матричный калькулятор\n" +
                         "end - Закрыть программу"
                     );
 
@@ -48,6 +53,7 @@ namespace app
             {
                 case "1":
                 case "2":
+                case "3":
                     selected = true;
                     break;
                 case "end":
@@ -75,6 +81,9 @@ namespace app
                     case "2":
                         Console.WriteLine("Приветствую в моём зоомагазинчике! Что вы хотели бы?");
                         zooManager();
+                        break;
+                    case "3":
+                        matrixCalculator();
                         break;
                 }
             }
@@ -183,6 +192,176 @@ namespace app
             {
                 work = func(values);
             }
+        }
+
+        static void matrixCalculator()
+        {
+            SquareMatrix matrix1 = null;
+            SquareMatrix matrix2 = null;
+            SquareMatrix result = null;
+
+            doMenu(matrixCalculatorMenu, new SquareMatrix[] { matrix1, matrix2, result });
+        }
+
+        static bool matrixCalculatorMenu(SquareMatrix[] matrixValues)
+        {
+            bool work = true;
+
+            Console.WriteLine(
+                "1 - Создать первую матрицу\n" +
+                "2 - Создать вторую матрицу\n" +
+                "3 - Сложить матрицы\n" +
+                "4 - Умножить матрицы\n" +
+                "5 - Найти определитель первой матрицы\n" +
+                "6 - Найти обратную матрицу для первой матрицы\n" +
+                "7 - Клонировать первую матрицу\n" +
+                "8 - Показать матрицы\n" +
+                "end - Вернуться в главное меню"
+            );
+
+            Console.Write("\nВыбирите действие: ");
+            string action = Console.ReadLine();
+            Console.WriteLine("\n");
+
+            try
+            {
+                switch (action)
+                {
+                    case "1":
+                        matrixValues[0] = createMatrix();
+                        Console.WriteLine("Первая матрица создана:\n" + matrixValues[0]);
+                        break;
+                    case "2":
+                        matrixValues[1] = createMatrix();
+                        Console.WriteLine("Вторая матрица создана:\n" + matrixValues[1]);
+                        break;
+                    case "3":
+                        matrixValues[2] = matrixValues[0] + matrixValues[1];
+                        Console.WriteLine("Результат сложения:\n" + matrixValues[2]);
+                        break;
+                    case "4":
+                        matrixValues[2] = matrixValues[0] * matrixValues[1];
+                        Console.WriteLine("Результат умножения:\n" + matrixValues[2]);
+                        break;
+                    case "5":
+                        checkMatrix(matrixValues[0], "первая матрица");
+                        Console.WriteLine("Определитель первой матрицы: " + matrixValues[0].Determinant());
+                        break;
+                    case "6":
+                        checkMatrix(matrixValues[0], "первая матрица");
+                        matrixValues[2] = matrixValues[0].InverseMatrix();
+                        Console.WriteLine("Обратная матрица:\n" + matrixValues[2]);
+                        break;
+                    case "7":
+                        checkMatrix(matrixValues[0], "первая матрица");
+                        matrixValues[2] = matrixValues[0].Clone();
+                        Console.WriteLine("Клон первой матрицы:\n" + matrixValues[2]);
+                        Console.WriteLine("Клон равен оригиналу: " + matrixValues[2].Equals(matrixValues[0]));
+                        Console.WriteLine("Клон и оригинал один объект: " + Object.ReferenceEquals(matrixValues[2], matrixValues[0]));
+                        break;
+                    case "8":
+                        showMatrix("Первая матрица", matrixValues[0]);
+                        showMatrix("Вторая матрица", matrixValues[1]);
+                        showMatrix("Последний результат", matrixValues[2]);
+                        break;
+                    case "end":
+                        work = false;
+                        break;
+                    default:
+                        Console.WriteLine("Команда не распознана");
+                        break;
+                }
+            }
+            catch (MatrixException e)
+            {
+                Console.WriteLine("Ошибка матрицы: " + e.Message);
+            }
+
+            if (work)
+            {
+                Console.WriteLine("\nНажмите чтобы продолжить");
+                Console.ReadKey();
+                Console.Clear();
+            }
+
+            return work;
+        }
+
+        static SquareMatrix createMatrix()
+        {
+            Console.Write("Введите размер матрицы: ");
+            int size = readInt();
+
+            if (size <= 1)
+            {
+                throw new MatrixSizeException("Размер матрицы должен быть больше 1.");
+            }
+
+            Console.Write("Заполнить случайными значениями? y/n: ");
+            string random = Console.ReadLine();
+
+            if (random == "y")
+            {
+                return new SquareMatrix(size);
+            }
+
+            double[,] matrix = new double[size, size];
+
+            for (int i = 0; i < size; ++i)
+            {
+                for (int j = 0; j < size; ++j)
+                {
+                    Console.Write("Элемент [" + i + ", " + j + "]: ");
+                    matrix[i, j] = readDouble();
+                }
+            }
+
+            return new SquareMatrix(matrix);
+        }
+
+        static int readInt()
+        {
+            int number;
+
+            while (!int.TryParse(Console.ReadLine(), out number))
+            {
+                Console.WriteLine("Ошибка! Введите целое число:");
+            }
+
+            return number;
+        }
+
+        static double readDouble()
+        {
+            double number;
+
+            while (!double.TryParse(Console.ReadLine(), out number))
+            {
+                Console.WriteLine("Ошибка! Введите число:");
+            }
+
+            return number;
+        }
+
+        static void checkMatrix(SquareMatrix matrix, string matrixName)
+        {
+            if (matrix == null)
+            {
+                throw new MatrixNullException("Не создана " + matrixName + ".");
+            }
+        }
+
+        static void showMatrix(string name, SquareMatrix matrix)
+        {
+            Console.WriteLine(name + ":");
+
+            if (matrix == null)
+            {
+                Console.WriteLine("Матрица не создана\n");
+                return;
+            }
+
+            Console.WriteLine(matrix);
         }
 
         static void raisingToPower()
