@@ -1,7 +1,11 @@
-﻿using System;
+using System;
+using System.IO;
+using System.Collections.Generic;
 using ConsoleApp2.thirdTaskClass;
 using ConsoleApp2.secondTaskClass;
 using ConsoleApp2.secondTaskClass.animalTypes;
+using ConsoleApp2.fourthTaskClass;
+using ConsoleApp2.fifthTaskClass;
 
 namespace app
 {
@@ -12,10 +16,6 @@ namespace app
             try
             {
                 doMenu(mainMenu);
-            }
-            catch (MatrixException e)
-            {
-                Console.WriteLine("Ошибка матрицы: " + e.Message);
             }
             catch (OverflowException e)
             {
@@ -38,14 +38,15 @@ namespace app
             Console.WriteLine(
                         "1 - Вычислить a^n, изменить позиции элементов у числа\n" +
                         "2 - Зоомагазин\n" +
-                        "3 - Матричный калькулятор\n" +
+                        "3 - Работа с матрицами\n" +
+                        "4 - Текстовый редактор / Индексация\n" +
+                        "5 - Строки и коллекции\n" +
                         "end - Закрыть программу"
                     );
 
             Console.Write("\nПросмотреть задачу: ");
             string task = Console.ReadLine();
             Console.WriteLine("\n");
-
 
             bool selected = false;
 
@@ -54,6 +55,8 @@ namespace app
                 case "1":
                 case "2":
                 case "3":
+                case "4":
+                case "5":
                     selected = true;
                     break;
                 case "end":
@@ -85,9 +88,14 @@ namespace app
                     case "3":
                         matrixCalculator();
                         break;
+                    case "4":
+                        fourthTaskMenu();
+                        break;
+                    case "5":
+                        TextCorrector.Run();
+                        break;
                 }
             }
-            
 
             if (work)
             {
@@ -386,7 +394,7 @@ namespace app
 
             for (int i = 1; i < n; ++i)
             {
-                result *= n;
+                result *= a;
             }
 
             Console.WriteLine("Результат: " + result + "\n");
@@ -416,6 +424,63 @@ namespace app
 
             Console.Write("\nРезультат: ");
             Console.Write(tempNumberInString);
+        }
+
+        static void fourthTaskMenu()
+        {
+            bool working = true;
+
+            while (working)
+            {
+                Console.Clear();
+                Console.WriteLine(
+                    "1 - Текстовый редактор\n" +
+                    "2 - Индексатор файлов\n" +
+                    "3 - Поиск файлов по ключевому слову\n" +
+                    "end - Назад"
+                );
+                Console.Write("\nВыберите действие: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.Clear();
+                        TextEditor.RunEditor();
+                        break;
+                    case "2":
+                        Console.Clear();
+                        FileIndexer.RunIndexer();
+                        break;
+                    case "3":
+                        Console.Clear();
+                        searchByKeywordMenu();
+                        break;
+                    case "end":
+                        working = false;
+                        break;
+                    default:
+                        Console.WriteLine("Команда не распознана");
+                        break;
+                }
+            }
+        }
+
+        static void searchByKeywordMenu()
+        {
+            Console.Write("Введите путь к директории (внутри workspace): ");
+            string dir = Console.ReadLine();
+
+            Console.Write("Введите ключевое слово: ");
+            string keyword = Console.ReadLine();
+
+            TextFileSearcher searcher = new TextFileSearcher();
+            List<string> results = searcher.SearchByKeyword(dir, keyword);
+
+            searcher.PrintResults(results);
+
+            Console.WriteLine("\nНажмите любую клавишу...");
+            Console.ReadKey();
         }
     }
 }
